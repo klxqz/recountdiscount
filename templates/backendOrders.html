@@ -1,0 +1,38 @@
+<style>
+    a#recountdiscount{
+        display: inline-block;
+    }
+</style>
+<script>
+    $(function() {
+        var intervalID = setInterval(function() {
+            if ($('#discount').length > 0) {
+                $('#discount').closest('td').append('<div><i style="display: none;" id="recountdiscount-loading" class="icon16 loading"></i><a id="recountdiscount" href="#">Пересчитать</a></div>');
+                clearInterval(intervalID);
+            }
+        }, 1000);
+
+        $('#recountdiscount').live('click', function() {
+            var action = $('#order-edit-form').attr('action');
+            var re = /id=([0-9]+)/i;
+            var found = action.match(re);
+            var order_id = null;
+            if(found) {
+                order_id = found[1];
+            }
+            $('#recountdiscount-loading').show();
+            $.ajax({
+                type: 'POST',
+                url: '?plugin=recountdiscount&id=' + order_id,
+                dataType: 'json',
+                data: $('#order-edit-form').serialize(),
+                success: function(data, textStatus, jqXHR) {
+                    $('#recountdiscount-loading').hide();
+                    $('#discount').val(data.data.discount);
+                }
+            });
+            return false;
+        });
+    });
+
+</script>
