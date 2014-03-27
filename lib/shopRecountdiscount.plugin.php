@@ -9,7 +9,6 @@ class shopRecountdiscountPlugin extends shopPlugin {
     public function backendOrders() {
         if ($this->getSettings('status')) {
             $view = wa()->getView();
-            $order_id = waRequest::get('id', null, waRequest::TYPE_INT);
             $html = $view->fetch('plugins/recountdiscount/templates/backendOrders.html');
             return array(
                 'sidebar_section' => $html,
